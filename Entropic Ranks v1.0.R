@@ -16,17 +16,17 @@ entropic_analysis <- function(ordered_vector,step_up=1,window_size,bins,verbose=
   
   if (verbose)
   {
-    message("Calculating entropies of ",length(entropy_plotter)," ovelapping windows on a list of ",length(ordered_vector)," features")
+    message("Calculating entropies of ",length(entropy_plotter)," ovelapping windows")
     message("Suggested cutoff at feature no ",seq(length(temp$cluster))[temp$cluster!=temp$cluster[1]][1]-1,", at a mean entropy of ",mean(entropy_plotter[1:seq(length(temp$cluster))[temp$cluster!=temp$cluster[1]][1]]))
     message("Last 1/3 entropy infimum: ",min(entropy_plotter[floor(length(entropy_plotter)*2/3):length(entropy_plotter)]))
-    barplot(entropy_plotter,xlab=c("Observation step = ",step_up),ylab=c("Window size = ",window_size),main=c(bins," bins"),names.arg=seq(length(entropy_plotter))*step_up)
+    barplot(entropy_plotter,xlab=c("Granularity = ",step_up),ylab=c("Window size = ",window_size),main=c(bins," bins"),names.arg=seq(length(entropy_plotter))*step_up)
     barplot(temp$silinfo$widths$sil_width,ylim=c(-0.3,1),ylab="Silhouette width",xlab="Clustered elements",main="K-means clustering quality")
   }
   
   return((seq(length(temp$cluster))[temp$cluster!=temp$cluster[1]][1]-1)*step_up)
 }
 
-isolate_significant_elements <- function(list_under_analysis,resolution=1,process_log=FALSE)
+isolate_significant_elements <- function(data_under_analysis,granularity=1,process_log=FALSE)
 {
   suggested_surfaces <- c()
   
@@ -39,39 +39,39 @@ isolate_significant_elements <- function(list_under_analysis,resolution=1,proces
     {
       if (process_log)
       {
-        message("Calculating for ",i*5," bins with a sliding window of ",j*10," features")
+        message("Reiterating for ",i*5," bins and a sliding window of ",j*10," features")
       }
-      suggested_surfaces <- c(suggested_surfaces,entropic_analysis(ordered_vector=list_under_analysis,step_up=resolution,bins=i*5,window_size=j*10,verbose=process_log))
+      suggested_surfaces <- c(suggested_surfaces,entropic_analysis(ordered_vector=data_under_analysis,step_up=granularity,bins=i*5,window_size=j*10,verbose=process_log))
     }
   }
   
   if (process_log)
   {
     print(table(suggested_surfaces))
-    message("Cutoff at feature no ",as.integer(rownames(table(suggested_surfaces))[table(suggested_surfaces) == max(table(suggested_surfaces))])[1],".")
+    message("Most consistent cutoff point: feature no ",as.integer(rownames(table(suggested_surfaces))[table(suggested_surfaces) == max(table(suggested_surfaces))])[1],".")
     par(mfrow=c(1,1))
   }
   return(as.integer(rownames(table(suggested_surfaces))[table(suggested_surfaces) == max(table(suggested_surfaces))])[1])
 }
 
-entropic_ranks <- function(data_under_analysis,population_vector,data_origin=NULL,granularity=1,supervised=FALSE,create_output_files=FALSE,is_logged=TRUE,logbase=2,huge_feature_list=FALSE)
+entropic_ranks <- function(data_under_analysis,population_vector,data_origin=NULL,granularity=1,process_log=FALSE,create_output_files=FALSE,is_logged=TRUE,logbase=2,huge_feature_list=FALSE)
 {
   if (is.null(data_origin))
   {
     data_origin <- rep(1,length(population_vector))
   }
   
-  comparison <- RPadvance(data_under_analysis,cl=population_vector,origin=data_origin,logged=is_logged,na.rm=FALSE,gene.names=rownames(data_under_analysis),plot=supervised,huge=TRUE)
+  comparison <- RPadvance(data_under_analysis,cl=population_vector,origin=data_origin,logged=is_logged,na.rm=FALSE,gene.names=rownames(data_under_analysis),plot=process_log,huge=TRUE)
 
   if (huge_feature_list)
   {
-    rank_product_lists <- topGene(rank_product_comparison,method="pfp",num.gene=5000,logged=is_logged,logbase=logbase,gene.names=rownames(data_under_analysis))
+    rank_product_lists <- topGene(comparison,method="pfp",num.gene=5000,logged=is_logged,logbase=logbase,gene.names=rownames(data_under_analysis))
   }else{
-    rank_product_lists <- topGene(rank_product_comparison,cutoff=0.99,method="pfp",num.gene=NULL,logged=is_logged,logbase=logbase,gene.names=rownames(data_under_analysis))
+    rank_product_lists <- topGene(comparison,cutoff=0.99,method="pfp",num.gene=NULL,logged=is_logged,logbase=logbase,gene.names=rownames(data_under_analysis))
   }
   
-  rank_product_lists$Table1 <- rank_product_lists$Table1[1:isolate_significant_elements(list_under_analysis=rank_product_lists$Table1[,2],resolution=granularity,process_log=supervised),]
-  rank_product_lists$Table2 <- rank_product_lists$Table2[1:isolate_significant_elements(list_under_analysis=rank_product_lists$Table2[,2],resolution=granularity,process_log=supervised),]
+  rank_product_lists$Table1 <- rank_product_lists$Table1[1:isolate_significant_elements(rank_product_lists$Table1[,2],granularity,process_log),]
+  rank_product_lists$Table2 <- rank_product_lists$Table2[1:isolate_significant_elements(rank_product_lists$Table2[,2],granularity,process_log),]
   
   if (create_output_files)
   {

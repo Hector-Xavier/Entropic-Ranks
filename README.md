@@ -1,7 +1,7 @@
-#Entropic Ranks readme
+Entropic Ranks readme
 
 Depends:
-RankProd #reliable compatibility with RankProd versions up to 2.44.0
+RankProd (reliable compatibility with RankProd versions up to 2.44.0)
 entropy
 factoextra
 

@@ -67,6 +67,7 @@ isolate_significant_elements <- function(ordered_vector,granularity=1,supervised
   {
     print(table(suggested_surfaces))
     message("Most consistent cutoff point: feature no ",as.integer(rownames(table(suggested_surfaces))[table(suggested_surfaces) == max(table(suggested_surfaces))])[1],".")
+    return(suggested_surfaces)
   }
   if (!supervised)
     return(as.integer(rownames(table(suggested_surfaces))[table(suggested_surfaces) == max(table(suggested_surfaces))])[1])

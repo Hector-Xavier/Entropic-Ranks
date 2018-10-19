@@ -9,9 +9,10 @@ entropic_ranks
 
 Description: Performs an Entropic Ranks analysis on a data set, returning a list containing downregulated and upregulated features. May be used supervised, returning the full feature list and printing the suggested cutoff points for later manual trimming, or unsupervised, returning only the information-rich feature list. In the unsupervised mode, the lists of information-rich features may be exported as tab-delimited .txt files automatically.
 
-Usage: entropic_ranks (data_under_analysis,population_vector,data_origin=NULL,granularity=1,supervised=FALSE,process_log=FALSE,export_plots=FALSE,create_output_files=FALSE,is_logged=TRUE,logbase=2,huge_feature_list=FALSE)
+## Usage:
+entropic_ranks(data_under_analysis,population_vector,data_origin=NULL,granularity=1,supervised=FALSE,process_log=FALSE,export_plots=FALSE,create_output_files=FALSE,is_logged=TRUE,logbase=2,huge_feature_list=FALSE)
 
-Arguments:
+## Arguments:
 data_under_analysis - Table with rows representing features, columns representing samples and cells containing the values to be compared. Rownames and column names must be unique.
 
 population_vector - Binary integer vector (0 or 1), of length equal to the number of columns of data_under_analysis. Denotes the two sample subpopulations to be compared.

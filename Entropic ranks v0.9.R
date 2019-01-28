@@ -53,3 +53,9 @@ isolate_significant_elements <- function(list_under_analysis,resolution=1,proces
   }
   return(as.integer(rownames(table(suggested_surfaces))[table(suggested_surfaces) == max(table(suggested_surfaces))])[1])
 }
+
+#Code written by Hector-Xavier de Lastic
+#Development & testing by Hector-Xavier de Lastic & Irene Liampa
+#Contact:
+#hector.xavier.de.lastic@gmail.com
+#irini.liampa@gmail.com

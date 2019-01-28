@@ -1,14 +1,13 @@
-require("RankProd")
-#reliable compatibility with RankProd versions up to 2.44.0
-require("entropy")
-require("factoextra")
+library("RankProd")
+library("entropy")
+library("factoextra")
 
-entropic_ranks <- function(data_under_analysis,population_vector,data_origin=NULL,granularity=1,supervised=FALSE,process_log=FALSE,export_plots=FALSE,create_output_files=FALSE,is_logged=TRUE,logbase=2,huge_feature_list=FALSE)
+entropic_ranks <- function(data_under_analysis,population_vector,data_origin,granularity,supervised,process_log,export_plots,create_output_files,is_logged,logbase,huge_feature_list)
 {
   if (is.null(data_origin))
     data_origin <- rep(1,length(population_vector))
   
-  message("Calculating Rank Products. May take a lot of time, depending on data size.")
+  message("Calculating Rank Products. May take a long time, depending on data set size.")
   comparison <- RPadvance(data_under_analysis,cl=population_vector,origin=data_origin,logged=is_logged,na.rm=FALSE,gene.names=rownames(data_under_analysis),plot=process_log,huge=TRUE)
   if (huge_feature_list){
     message("Investigating only the first 20000 features.")
@@ -130,3 +129,9 @@ entropic_analysis <- function(ordered_vector,step_up=1,window_size,bins,verbose=
   
   return(seq(length(entropy_clusters$cluster))[entropy_clusters$cluster!=as.integer(entropy_clusters$centers==max(entropy_clusters$centers))[1]+1][1]-1)
 }
+
+#Code written by Hector-Xavier de Lastic
+#Development & testing by Hector-Xavier de Lastic & Irene Liampa
+#Contact:
+#hector.xavier.de.lastic@gmail.com
+#irini.liampa@gmail.com

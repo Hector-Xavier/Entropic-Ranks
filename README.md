@@ -3,8 +3,6 @@
 Depends:
 RankProd (reliable compatibility with RankProd versions up to 2.44.0), entropy, factoextra
 
-# Entropic Ranks (docker) readme
-
 ## ● entropic_ranks
 
 Description: Performs an Entropic Ranks analysis on a data set, returning a list containing downregulated and upregulated features. May be used supervised, returning the full feature list and printing the suggested cutoff points for later manual trimming, or unsupervised, returning only the information-rich feature list. In the unsupervised mode, the lists of information-rich features may be exported as tab-delimited .txt files automatically.

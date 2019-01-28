@@ -1,9 +1,7 @@
 # Entropic Ranks readme
 
 Depends:
-RankProd (reliable compatibility with RankProd versions up to 2.44.0)
-entropy
-factoextra
+RankProd (reliable compatibility with RankProd versions up to 2.44.0), entropy, factoextra
 
 # Entropic Ranks (docker) readme
 

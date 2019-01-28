@@ -5,7 +5,7 @@ RankProd (reliable compatibility with RankProd versions up to 2.44.0), entropy, 
 
 # Entropic Ranks (docker) readme
 
-## entropic_ranks
+## ● entropic_ranks
 
 Description: Performs an Entropic Ranks analysis on a data set, returning a list containing downregulated and upregulated features. May be used supervised, returning the full feature list and printing the suggested cutoff points for later manual trimming, or unsupervised, returning only the information-rich feature list. In the unsupervised mode, the lists of information-rich features may be exported as tab-delimited .txt files automatically.
 
@@ -36,7 +36,7 @@ Description: Performs an Entropic Ranks analysis on a data set, returning a list
 **huge_feature_list** - Only set to TRUE if the entropic_ranks fails to run due to huge feature lists returned by RankProd (e.g. more than 25000-30000 features) and you can be reasonably sure that less than 1000 are differentially expressed and information-rich. If TRUE, entropic_analysis will only investigate the first 20000 features and isolare information-rich features from among them. The issue may consistently appear due to RAM shortage when analyzing methylation data. (default: FALSE)
 
 
-## isolate_significant_elements
+## ● isolate_significant_elements
 
 Description: Calls entropic_analysis repeatedly on an ordered vector to generate a set of possible cutoff points over a range of different window sized and bins. Identifies the most consistent cutoff point. May be used as an unsupervised procedure, returning the cutoff point, or as a supervised procedure, returning the set of possible cutoff points for the researcher to further investigate.
 
@@ -57,7 +57,7 @@ Description: Calls entropic_analysis repeatedly on an ordered vector to generate
 **path** - Of type character, specifies the path for plot export. If NULL, it defaults to working directory/Entropic Ranks plots. Ignored if export_plots is set to FALSE.
 
 
-## entropic_analysis
+## ● entropic_analysis
 Description: The function performs an entropic analuysis of an ordered vector produced by RPadvance to identify the end point of its information-rich area. Entropy scores are calculated with the use of a sliding window.
 
 ## Usage:

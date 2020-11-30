@@ -81,9 +81,30 @@ entropic_ranks <- function(data_under_analysis,population_vector,data_origin=NUL
   if (!supervised && create_output_files)
   {
     if (downregulated_suggestions$suggested_cutoff_surface > 0)
-      write.table(file="Downregulated list [information-dense].txt",rank_product_lists$Table1[1:downregulated_suggestions$suggested_cutoff_surface,3:5],sep="\t",quote=FALSE,row.names=TRUE,col.names=TRUE)
+    {
+      if (downregulated_suggestions$suggested_cutoff_surface > 1)
+      {
+        write.table(file="Downregulated list [information-dense].txt",rank_product_lists$Table1[1:downregulated_suggestions$suggested_cutoff_surface,3:5],sep="\t",quote=FALSE,row.names=TRUE,col.names=TRUE)
+      } else {
+        single_feature <- as.table(t(rank_product_lists$Table1[,3:5]))
+        rownames(single_feature) <- rownames(rank_product_lists$Table1)
+        write.table(file="Downregulated list [information-dense].txt",single_feature,sep="\t",quote=FALSE,row.names=TRUE,col.names=TRUE)
+        rm(single_feature)
+      }
+    }
+      
     if (upregulated_suggestions$suggested_cutoff_surface > 0)
-      write.table(file="Upregulated list [information-dense].txt",rank_product_lists$Table2[1:upregulated_suggestions$suggested_cutoff_surface,3:5],sep="\t",quote=FALSE,row.names=TRUE,col.names=TRUE)
+    {
+      if (upregulated_suggestions$suggested_cutoff_surface > 1)
+      {
+        write.table(file="Upregulated list [information-dense].txt",rank_product_lists$Table2[1:upregulated_suggestions$suggested_cutoff_surface,3:5],sep="\t",quote=FALSE,row.names=TRUE,col.names=TRUE)
+      } else {
+        single_features <- as.table(t(rank_product_lists$Table2[,3:5]))
+        rownames(single_feature) <- rownames(rank_product_lists$Table2)
+        write.table(file="Upregulated list [information-dense].txt",single_feature,sep="\t",quote=FALSE,row.names=TRUE,col.names=TRUE)
+        rm(single_feature)
+      }
+    }
     message("Output files created successfully.")
   }
   

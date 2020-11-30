@@ -9,7 +9,7 @@ RankProd (reliable compatibility with RankProd versions up to 2.44.0), entropy, 
 Performs an Entropic Ranks analysis on a data set, returning a list containing downregulated and upregulated features. May be used supervised, returning the full feature list and printing the suggested cutoff points for later manual trimming, or unsupervised, returning only the information-rich feature list. In the unsupervised mode, the lists of information-rich features may be exported as tab-delimited .txt files automatically.
 
 ## Usage:
-```{r}
+```console
 entropic_ranks(data_under_analysis,population_vector,data_origin=NULL,granularity=1,supervised=FALSE,process_log=FALSE,export_plots=FALSE,create_output_files=FALSE,is_logged=TRUE,logbase=2,huge_feature_list=FALSE)
 ```
 
@@ -43,7 +43,7 @@ entropic_ranks(data_under_analysis,population_vector,data_origin=NULL,granularit
 Calls entropic_analysis repeatedly on an ordered vector to generate a set of possible cutoff points over a range of different window sized and bins. Identifies the most consistent cutoff point. May be used as an unsupervised procedure, returning the cutoff point, or as a supervised procedure, returning the set of possible cutoff points for the researcher to further investigate.
 
 ## Usage:
-```{r}
+```console
 isolate_significant_elements (ordered_vector,granularity=1,supervised=FALSE,process_log=FALSE,export_plots=FALSE,path=NULL)
 ```
 
@@ -58,7 +58,7 @@ isolate_significant_elements (ordered_vector,granularity=1,supervised=FALSE,proc
 
 **export_plots** - If TRUE, png plots of the entropy distributions and clustering qualities will be exported as files in the directory provided in the path variable. (default: FALSE)
 
-**path** - Of type character, specifies the path for plot export. If NULL, it defaults to working directory/Entropic Ranks plots. Ignored if export_plots is set to FALSE. (default: NULL)
+**path** - Of type character, specifies the path for plot export. If NULL, it defaults to "working_directory)/Entropic Ranks plots". Ignored if export_plots is set to FALSE. (default: NULL)
 
 
 # ● entropic_analysis
@@ -66,7 +66,7 @@ isolate_significant_elements (ordered_vector,granularity=1,supervised=FALSE,proc
 The function performs an entropic analuysis of an ordered vector produced by RPadvance to identify the end point of its information-rich area. Entropy scores are calculated with the use of a sliding window.
 
 ## Usage:
-```{r}
+```console
 entropic_analysis (ordered_vector,step_up=1,window_size,bins,verbose=FALSE,export_plots=FALSE,path=NULL)
 ```
 

@@ -44,11 +44,6 @@ entropic_ranks <- function(data_under_analysis,population_vector,data_origin=NUL
   }
   upregulated_suggestions <- isolate_significant_elements(rank_product_lists$Table2[,2],granularity,supervised,process_log,export_plots,path=path_up)
   
-  if (!supervised)
-  {
-    rank_product_lists$Table1 <- rank_product_lists$Table1[1:downregulated_suggestions$suggested_cutoff_surface,]
-    rank_product_lists$Table2 <- rank_product_lists$Table2[1:upregulated_suggestions$suggested_cutoff_surface,]
-  }
   if (supervised || export_plots || process_log)
   {
     downregulated_suggestions$entropy_classification_topography <- downregulated_suggestions$entropy_classification_topography %>% layout(title="Topography of entropy clustering in downregulation")
@@ -57,10 +52,36 @@ entropic_ranks <- function(data_under_analysis,population_vector,data_origin=NUL
   
   if (!supervised && create_output_files)
   {
-    write.table(file="Downregulated list [original].txt",rank_product_lists$Table1[,3:5],sep="\t",quote=FALSE,row.names=TRUE,col.names=TRUE)
+    if (!is.null(rownames(rank_product_lists$Table1)))
+      write.table(file="Downregulated list [original].txt",rank_product_lists$Table1[,3:5],sep="\t",quote=FALSE,row.names=TRUE,col.names=TRUE)
+    if (!is.null(rownames(rank_product_lists$Table2)))
+      write.table(file="Upregulated list [original].txt",rank_product_lists$Table2[,3:5],sep="\t",quote=FALSE,row.names=TRUE,col.names=TRUE)
+  }
+  if (!supervised)
+  {
+    if (downregulated_suggestions$suggested_cutoff_surface==1)
+    {
+      single_feature <- as.table(t(rank_product_lists$Table1[1:1,]))
+      rownames(single_feature) <- rownames(rank_product_lists$Table1)[1]
+      rank_product_lists$Table1 <- single_feature
+      rm(single_feature)
+    } else {
+      rank_product_lists$Table1 <- rank_product_lists$Table1[1:downregulated_suggestions$suggested_cutoff_surface,]
+    }
+    if (upregulated_suggestions$suggested_cutoff_surface==1)
+    {
+      single_feature <- as.table(t(rank_product_lists$Table2[1:1,]))
+      rownames(single_feature) <- rownames(rank_product_lists$Table2)[1]
+      rank_product_lists$Table2 <- single_feature
+      rm(single_feature)
+    } else {
+      rank_product_lists$Table2 <- rank_product_lists$Table2[1:upregulated_suggestions$suggested_cutoff_surface,]
+    }
+  }
+  if (!supervised && create_output_files)
+  {
     if (downregulated_suggestions$suggested_cutoff_surface > 0)
       write.table(file="Downregulated list [information-dense].txt",rank_product_lists$Table1[1:downregulated_suggestions$suggested_cutoff_surface,3:5],sep="\t",quote=FALSE,row.names=TRUE,col.names=TRUE)
-    write.table(file="Upregulated list [original].txt",rank_product_lists$Table2[,3:5],sep="\t",quote=FALSE,row.names=TRUE,col.names=TRUE)
     if (upregulated_suggestions$suggested_cutoff_surface > 0)
       write.table(file="Upregulated list [information-dense].txt",rank_product_lists$Table2[1:upregulated_suggestions$suggested_cutoff_surface,3:5],sep="\t",quote=FALSE,row.names=TRUE,col.names=TRUE)
     message("Output files created successfully.")
@@ -117,11 +138,12 @@ isolate_significant_elements <- function(ordered_vector,granularity=1,supervised
       print(table(suggested_cutoffs))
       message("Most consistent cutoff point: feature no ",as.integer(rownames(table(suggested_cutoffs))[table(suggested_cutoffs) == max(table(suggested_cutoffs))])[1],".")
     }
-    entropy_topography <- plot_ly(z = ~(entropy_chartography[sort(entropy_chartography[,2],index.return=TRUE)$ix,c(3,3:1003)]))
+    entropy_cluster <- entropy_chartography[sort(entropy_chartography[,2],index.return=TRUE)$ix,c(3,3:1003)]
+    entropy_topography <- plot_ly(z = ~(entropy_cluster))
     entropy_topography <- entropy_topography %>% add_surface()
-    entropy_topography <- entropy_topography %>% layout(title="Topography of entropy clustering",scene=list(xaxis=list(title=".      Feature index"),yaxis=list(title="Window size %      ."),zaxis=list(title="Entropy cluster"),camera=list(eye=list(x=-1.80,y=-2.00,z=1.45))))
+    entropy_topography <- entropy_topography %>% layout(title="Topography of entropy clustering",scene=list(xaxis=list(title="Feature index"),yaxis=list(title="Window size (% of maximum)"),zaxis=list(title="Entropy cluster (high vs low)"),camera=list(eye=list(x=-1.30,y=-1.4,z=1)),aspectratio=list(x=1, y=1, z=0.7)))
   } else {
-    entropy_topography <- NULL
+  entropy_topography <- NULL
   }
   
   if (!supervised)
